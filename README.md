@@ -25,11 +25,6 @@ Pi pin 5  (SCL)  → sensor SCL
 Pi pin 6  (GND)  → sensor GND
 ```
 
-### Button wiring (no resistor needed)
-```
-GPIO 16 → one leg of button
-GND     → other leg of button
-```
 
 ### Syringe spec
 | | |
@@ -207,10 +202,6 @@ Reads the MS5837 pressure continuously. When it sees a pressure rise of
 ≥ 150 Pa above the air baseline for 4 consecutive reads (~2 seconds), it
 confirms the float is in water and launches `PID.py`.
 
-**Fallback — button:**
-If the sensor fails, or you want to manually trigger the dive, press the
-button wired to GPIO 16. This immediately launches `PID.py` regardless of
-sensor state.
 
 To adjust sensitivity edit these values at the top of `launcher.py`:
 ```python
@@ -230,13 +221,6 @@ Each run creates a new timestamped file: `run_YYYYMMDD_HHMMSS.csv`
 scp pi@<pi-ip>:~/float_data/*.csv ~/Desktop/
 ```
 
-### Option 2 — USB drive
-```bash
-# On the Pi
-sudo mount /dev/sda1 /mnt/usb
-cp ~/float_data/*.csv /mnt/usb/
-sudo umount /mnt/usb
-```
 
 ### Option 3 — read directly on Pi
 ```bash
@@ -267,7 +251,7 @@ The PID gains are set in `PID.py`:
 kp, ki, kd = 10.0, 0.5, 2.0
 ```
 
-These will need tuning based on your robot's actual mass and syringe response.
+These will need tuning based on  robot's actual mass and syringe response.
 Use this process:
 
 1. Set `ki=0, kd=0` — tune `kp` until robot reaches depth without wild oscillation
